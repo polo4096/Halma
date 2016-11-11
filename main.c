@@ -1,39 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int NB_LIGNE = 16;
+int NB_COLONNE = 16;
+
+int*** allocAndInit();
+
 int main()
 {
-    int n = 10;
-    int m = 10;
+    int*** tab = allocAndInit();
 
-    char*** tab = (char***) malloc(n * sizeof(char**));
-    int i = 0;
-    for(i = 0; i < n; i++) {
-        tab[i] = (char**) malloc(m * sizeof(char*));
-    }
+    tab[0][0] = 1; // On place un pion Player A
+    tab[5][6] = 1;
+    tab[15][3] = 2; // On place un pion Player B
 
-    i = 0;
-    int j = 0;
-    for(i = 0; i < n; i++) {
-        for(j = 0; j < m; j++) {
-            if(j % 2 == 0) {
-                tab[i][j] = "|";
+    int i, j;
+    for(i = 0; i < NB_LIGNE * 2 + 1; i++) {
+        for(j = 0; j < NB_COLONNE; j++) {
+            if(i % 2 == 0) {
+                printf("|---");
             } else {
-                if(i % 2 == 0) {
-                    tab[i][j] = " * ";
+                if(tab[i / 2][j] == 1) {
+                    printf("| * ");
+                } else if(tab[i / 2][j] == 2) {
+                    printf("| o ");
                 } else {
-                    tab[i][j] = "---";
+                    printf("|   ");
                 }
             }
         }
-        tab[i][m-1] = "\n";
+        printf("|\n");
     }
 
-
-    for(i = 0; i < n; i++) {
-        for(j = 0; j < m; j++) {
-            printf("%s", tab[i][j]);
-        }
-    }
     return 0;
 }
+
+int*** allocAndInit()
+ {
+    int*** tab = (int***) malloc(NB_LIGNE * sizeof(int**));
+    int i, j;
+    for(i = 0; i < NB_LIGNE; i++) {
+        tab[i] = (int**) malloc(NB_COLONNE * sizeof(int*));
+    }
+
+    for(i = 0; i < NB_LIGNE; i++) {
+        for(j = 0; j < NB_COLONNE; j++) {
+               tab[i][j] = 0; // Pas de pion
+        }
+    }
+
+    return tab;
+ }
